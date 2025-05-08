@@ -72,12 +72,13 @@ class CountryViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(countries, many=True)
         return Response(serializer.data)
 
+@login_required
 def country_list(request):
     query = request.GET.get('q', '').strip()
     countries = Country.objects.filter(common_name__icontains=query) if query else Country.objects.all()
     return render(request, 'countries/country_list.html', {'countries': countries})
 
-
+@login_required
 def country_detail(request, cca2):
     country = get_object_or_404(Country, cca2=cca2)
     regional_countries = Country.objects.filter(region=country.region).exclude(cca2=cca2)
