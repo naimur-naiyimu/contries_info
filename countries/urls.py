@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import CountryViewSet, country_list, country_detail, CustomLoginView, get_auth_token
-
+from django.contrib.auth.views import LogoutView 
 router = DefaultRouter()
 router.register(r'countries', CountryViewSet, basename='country')
 
