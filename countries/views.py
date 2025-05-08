@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Country, Language
 from .serializers import CountrySerializer
@@ -9,9 +9,24 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from django.db.models import Q
 
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from rest_framework.authtoken.models import Token
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    authentication_form = AuthenticationForm
+
+@login_required
+def get_auth_token(request):
+    token, created = Token.objects.get_or_create(user=request.user)
+    return JsonResponse({'token': token.key})
+
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly] 
     lookup_field = 'cca2'
     
 
