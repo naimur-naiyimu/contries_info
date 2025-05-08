@@ -25,6 +25,21 @@ class CountryViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(regional_countries, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def by_language(self, request):
+        """List countries that speak the same language"""
+        language_code = request.query_params.get('language')
+        if not language_code:
+            return Response(
+                {"error": "Language code parameter is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        countries = Country.objects.filter(languages__code=language_code)
+        serializer = self.get_serializer(countries, many=True)
+        return Response(serializer.data)
+
+
 
 def country_list(request):
     query = request.GET.get('q', '').strip()
