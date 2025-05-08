@@ -9,6 +9,22 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from django.db.models import Q
 
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    lookup_field = 'cca2'
+    
+
+    @action(detail=True, methods=['get'], url_path='regional')
+    def regional(self, request, cca2=None):
+        """List same regional countries of a specific country"""
+        country = self.get_object()
+        regional_countries = Country.objects.filter(
+            region=country.region
+        ).exclude(cca2=cca2)
+        serializer = self.get_serializer(regional_countries, many=True)
+        return Response(serializer.data)
+
 
 def country_list(request):
     query = request.GET.get('q', '').strip()
