@@ -39,7 +39,23 @@ class CountryViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(countries, many=True)
         return Response(serializer.data)
 
-
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        """Search for a country by name (supports partial search)"""
+        query = request.query_params.get('q')
+        if not query:
+            return Response(
+                {"error": "Search query parameter 'q' is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        countries = Country.objects.filter(
+            Q(common_name__icontains=query) |
+            Q(official_name__icontains=query) |
+            Q(alt_spellings__icontains=query)
+        )
+        serializer = self.get_serializer(countries, many=True)
+        return Response(serializer.data)
 
 def country_list(request):
     query = request.GET.get('q', '').strip()
