@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ country.common_name }} ({{ country.cca2 }})</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ country.flag_png }}" alt="{{ country.flag_alt }}" class="img-fluid mb-3">
+                    <p><strong>Official Name:</strong> {{ country.official_name }}</p>
+                    <p><strong>Region:</strong> {{ country.region }}</p>
+                    <p><strong>Subregion:</strong> {{ country.subregion }}</p>
+                    <p><strong>Population:</strong> {{ country.population|intcomma }}</p>
+                    <p><strong>Area:</strong> {{ country.area|intcomma }} km²</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Languages</h4>
+                    <ul>
+                        {% for language in languages %}
+                        <li>{{ language.name }} ({{ language.code }})</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <h4 class="mt-4">Timezones </h4>
+                    <ul>
+                        {{ country.timezone }}
+                        
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>Regional Countries</h4>
+                    <div class="list-group">
+                        {% for rc in regional_countries %}
+                        <a href="{% url 'country_detail' rc.cca2 %}" class="list-group-item list-group-item-action">
+                            {{ rc.common_name }} ({{ rc.cca2 }})
+                        </a>
+                        {% empty %}
+                        <div class="list-group-item">No other countries in this region</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'country_list' %}" class="btn btn-secondary mt-3">Back to List</a>
+</div>
+{% endblock %}
