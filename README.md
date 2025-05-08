@@ -55,11 +55,15 @@ GET /accounts/logout/
 ```http
 GET /accounts/logout/
 ```
-### 5. List all countries
+### 5. List all countries Create new country
 ```http
 GET /api/countries
 ```
-### 5.1. List all countries
+### 5.1. Create new country
+```http
+POST /api/countries
+```
+### 5.2. List all countries ( with UI)
 ```http
 GET /web/
 ```
@@ -67,7 +71,19 @@ GET /web/
 ```http
 GET /api/countries/{cca2}/
 ```
-### 6.1. Get specific country
+### 6.1. Full update
+```http
+PUT /api/countries/{cca2}/
+```
+### 6.2. Partial update
+```http
+PATCH /api/countries/{cca2}/
+```
+### 6.3. Delete country
+```http
+DELETE /api/countries/{cca2}/
+```
+### 6.4. Get specific country ( with UI)
 ```http
 GET /web/countries/<str:cca2>/
 ```
