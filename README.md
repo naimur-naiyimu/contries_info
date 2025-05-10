@@ -60,7 +60,11 @@ DATABASES = {
 ```bash
 pip install -r requirements.txt
 ```
-4. Running the Application:
+4. Fetch country data:
+```bash
+python manage.py fetch_countries
+```
+5. Running the Application:
 ```bash
 python manage.py runserver
 ```
